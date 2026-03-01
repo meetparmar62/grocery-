@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - FreshBasket</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">    <link rel="stylesheet" href="transitions.css">    <script src="transitions.js" defer></script>
+    <script src="cart.js" defer></script>
+    <script src="shop-helper.js" defer></script>
+    <script src="auth.js" defer></script>
+    <style>        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .nav-link-hover::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #10B981;
+            transition: width .3s ease-in-out;
+        }        .nav-link-hover:hover::after {
+            width: 100%;
+        }
+        
+        .product-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+          .product-card {
+            cursor: pointer;
+        }        /* Mobile menu slide down animation */
+        </style>
+</head>
+<body class="text-gray-800">    <!-- Portal transition handled by transitions.js -->
+
+    <!-- Header (copied from main page) -->
+    <header class="bg-white shadow-md sticky top-0 z-50">        <nav class="container mx-auto px-4 py-4 flex items-center justify-between h-16">
+            <a href="index.html" class="flex items-center space-x-2 hover:opacity-80 transition duration-300">
+                <i class="fas fa-leaf text-green-600 text-2xl"></i>
+                <span class="text-2xl font-bold text-green-700">FreshBasket</span>
+            </a>            <ul class="flex space-x-8 text-lg font-medium items-center">
+                <li><a href="index.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Home</a></li>
+                <li><a href="shop.html" class="text-green-600 font-bold nav-link-hover">Shop</a></li>
+                <li><a href="categories.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Categories</a></li>
+                <li><a href="offers.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Offers</a></li>
+                <li><a href="about.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">About Us</a></li>
+                <li><a href="#" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Contact</a></li>
+            </ul>
+            <div class="flex items-center space-x-6">                <div class="relative">
+                    <input type="text" placeholder="Search..." class="pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300" id="nav-search-desktop">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer" onclick="performNavSearch('nav-search-desktop')"></i>
+                </div><a href="cart.html" class="relative text-gray-700 hover:text-green-600 transition duration-300 transform hover:scale-110">
+                    <i class="fas fa-shopping-cart text-2xl"></i>
+                    <span class="cart-count absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </a>                <a href="login.html" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300 shadow-md transform hover:scale-105">Login / Signup</a>
+            </div>        </nav>
+    </header>    <!-- Hero Section for Shop Page -->
+    <section class="bg-gradient-to-r from-green-100 to-white py-32 rounded-b-3xl shadow-lg mb-12">
+        <div class="container mx-auto px-4 flex flex-row items-center justify-between">
+            <div class="w-1/2 text-left hero-animate-left">
+                <h1 class="text-6xl font-extrabold text-green-800 leading-tight mb-4">
+                    Shop Fresh Groceries & Essentials
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 max-w-md">
+                    Browse our wide range of fresh, organic produce and daily essentials. Quality products delivered to your doorstep.
+                </p>
+                <div class="flex justify-start space-x-4">
+                    <a href="#products" class="bg-green-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-green-700 transition duration-300 shadow-lg transform hover:scale-105 hero-button-delay-1">
+                        Start Shopping
+                    </a>
+                </div>
+            </div>
+            <div class="w-1/2 flex justify-end hero-animate-right">
+                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&h=500&fit=crop&crop=center" alt="Shop Groceries" class="rounded-3xl shadow-xl max-w-full h-auto">
+            </div>
+        </div>
+    </section>    <main class="container mx-auto px-4 py-12 flex gap-8">
+        <!-- Sidebar -->
+        <aside class="w-1/4 bg-white rounded-2xl shadow-lg p-6 h-fit">
+            <h2 class="text-xl font-bold text-green-800 mb-4">Categories</h2>
+            <ul class="space-y-2">
+                <li><a href="#" class="text-gray-700 hover:text-green-600">Fruits & Vegetables</a></li>
+                <li><a href="#" class="text-gray-700 hover:text-green-600">Dairy Products</a></li>
+                <li><a href="#" class="text-gray-700 hover:text-green-600">Snacks</a></li>
+                <li><a href="#" class="text-gray-700 hover:text-green-600">Beverages</a></li>
+                <li><a href="#" class="text-gray-700 hover:text-green-600">Bakery Items</a></li>
+                <li><a href="#" class="text-gray-700 hover:text-green-600">Household Essentials</a></li>
+            </ul>
+            <hr class="my-6">
+            <h2 class="text-xl font-bold text-green-800 mb-4">Filter by</h2>
+            <label class="block mb-2 text-gray-700">Price Range</label>
+            <input type="range" min="0" max="500" class="w-full mb-4" id="price-range">
+            <span class="text-gray-600 text-sm" id="price-value">₹250</span>
+            <label class="block mb-2 text-gray-700">Brand</label>
+            <select class="w-full border rounded p-2 mb-4" id="brand-select">
+                <option>All</option>
+                <option>FreshBasket</option>
+                <option>FarmFresh</option>
+                <option>OrganicCo</option>
+            </select>
+            <label class="block mb-2 text-gray-700">Tags</label>
+            <div class="flex flex-wrap gap-2">
+                <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs tag-filter" data-tag="organic">Organic</span>
+                <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs tag-filter" data-tag="new">New</span>
+                <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs tag-filter" data-tag="bestseller">Best Seller</span>
+            </div>
+        </aside>
+        <!-- Main Shop Content -->
+        <section id="products" class="flex-1">            <div class="flex flex-row items-center justify-between mb-8 gap-4">
+                <h1 class="text-3xl font-bold text-green-800">Shop All Products</h1><div class="flex gap-2">
+                    <div class="relative">
+                        <input type="text" placeholder="Search products..." class="pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300" id="product-search">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-8 product-grid">
+                <!-- 15 Product Cards -->
+                <!-- Example Product Card -->                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="199" data-brand="FarmFresh" data-tags="organic,new" id="product-1000">
+                    <a href="product-detail.html?id=1000" class="product-link">
+                        <img src="https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400&h=300&fit=crop&crop=center" alt="Organic Red Apples" class="w-full h-40 object-cover mb-4 rounded-xl">
+                        <h3 class="text-lg font-semibold text-gray-700 product-name">Organic Red Apples</h3>
+                        <p class="text-sm text-gray-500 mb-2">Fruits & Vegetables</p>
+                        <p class="text-xl font-bold text-green-700 mb-1">₹199 <span class="text-sm text-gray-400 line-through">₹250</span></p>
+                        <div class="flex items-center text-yellow-500 mb-2">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.5)
+                        </div>
+                        <p class="text-xs text-gray-400 mb-2">SKU: FB-001 | 1kg | Brand: FarmFresh</p>
+                        <p class="text-xs text-green-600 mb-2">In Stock</p>
+                        <p class="text-xs text-gray-500 mb-2">Rich in fiber and vitamin C. 100% organic.</p>
+                        <div class="flex gap-2 mb-2">
+                            <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Organic</span>
+                            <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs">New</span>
+                        </div>
+                    </a>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2 add-to-cart-btn">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+                <!-- 14 more product cards below (different products, similar structure) -->                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="60" data-brand="FreshBasket" data-tags="bestseller" id="product-1003">
+                    <a href="product-detail.html?id=1003" class="product-link">
+                        <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&h=300&fit=crop&crop=center" alt="Farm Fresh Milk" class="w-full h-40 object-cover mb-4 rounded-xl">
+                        <h3 class="text-lg font-semibold text-gray-700 product-name">Farm Fresh Milk</h3>
+                        <p class="text-sm text-gray-500 mb-2">Dairy Products</p>
+                        <p class="text-xl font-bold text-green-700 mb-1">₹60</p>
+                        <div class="flex items-center text-yellow-500 mb-2">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                        </div>
+                        <p class="text-xs text-gray-400 mb-2">SKU: FB-002 | 1L | Brand: FreshBasket</p>
+                        <p class="text-xs text-green-600 mb-2">In Stock</p>
+                        <p class="text-xs text-gray-500 mb-2">Pure, creamy, and hormone-free milk.</p>
+                        <div class="flex gap-2 mb-2">
+                            <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Best Seller</span>
+                        </div>
+                    </a>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2 add-to-cart-btn">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="45" data-brand="OrganicCo" data-tags="organic" id="product-1004">
+                    <a href="product-detail.html?id=1004" class="product-link">
+                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=300&fit=crop&crop=center" alt="Whole Wheat Bread" class="w-full h-40 object-cover mb-4 rounded-xl">
+                        <h3 class="text-lg font-semibold text-gray-700 product-name">Whole Wheat Bread</h3>
+                        <p class="text-sm text-gray-500 mb-2">Bakery Items</p>
+                        <p class="text-xl font-bold text-green-700 mb-1">₹45</p>
+                        <div class="flex items-center text-yellow-500 mb-2">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (5.0)
+                        </div>
+                        <p class="text-xs text-gray-400 mb-2">SKU: FB-003 | 400g | Brand: OrganicCo</p>
+                        <p class="text-xs text-green-600 mb-2">In Stock</p>
+                        <p class="text-xs text-gray-500 mb-2">Soft, healthy, and preservative-free bread.</p>
+                        <div class="flex gap-2 mb-2">
+                            <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Organic</span>
+                        </div>
+                    </a>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2 add-to-cart-btn">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="80" data-brand="FarmFresh" data-tags="organic">
+                    <img src="https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=400&h=300&fit=crop&crop=center" alt="Fresh Broccoli" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Fresh Broccoli</h3>
+                    <p class="text-sm text-gray-500 mb-2">Fruits & Vegetables</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹80</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i> (3.5)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-004 | 500g | Brand: FarmFresh</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Rich in vitamins and minerals. Freshly picked.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Organic</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="350" data-brand="OrganicCo" data-tags="new">
+                    <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400&h=300&fit=crop&crop=center" alt="Premium Coffee Beans" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Premium Coffee Beans</h3>
+                    <p class="text-sm text-gray-500 mb-2">Beverages</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹350 <span class="text-sm text-gray-400 line-through">₹400</span></p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (5.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-005 | 250g | Brand: OrganicCo</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Rich aroma, handpicked beans, premium quality.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs">New</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+                <!-- 10 more product cards, omitted for brevity but would follow the same structure with different details -->                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="40" data-brand="FarmFresh" data-tags="organic">
+                    <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400&h=300&fit=crop&crop=center" alt="Bananas" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Bananas</h3>
+                    <p class="text-sm text-gray-500 mb-2">Fruits & Vegetables</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹40</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-006 | 1kg | Brand: FarmFresh</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Naturally ripened, potassium-rich bananas.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Organic</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="90" data-brand="FreshBasket" data-tags="bestseller">
+                    <img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=300&fit=crop&crop=center" alt="Greek Yogurt" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Greek Yogurt</h3>
+                    <p class="text-sm text-gray-500 mb-2">Dairy Products</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹90</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i> (3.5)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-007 | 400g | Brand: FreshBasket</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Thick, creamy, and high in protein.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Best Seller</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="30" data-brand="OrganicCo" data-tags="new">
+                    <img src="https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=400&h=300&fit=crop&crop=center" alt="Potato Chips" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Potato Chips</h3>
+                    <p class="text-sm text-gray-500 mb-2">Snacks</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹30</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i> (3.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-008 | 150g | Brand: OrganicCo</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Crispy, lightly salted, and gluten-free.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs">New</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="120" data-brand="FreshBasket" data-tags="organic">
+                    <img src="https://images.unsplash.com/photo-1613478223719-2ab802602423?w=400&h=300&fit=crop&crop=center" alt="Orange Juice" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Orange Juice</h3>
+                    <p class="text-sm text-gray-500 mb-2">Beverages</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹120</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-009 | 1L | Brand: FreshBasket</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">100% pure, no added sugar or preservatives.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Organic</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="50" data-brand="FarmFresh" data-tags="bestseller">
+                    <img src="https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=400&h=300&fit=crop&crop=center" alt="Brown Bread" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Brown Bread</h3>
+                    <p class="text-sm text-gray-500 mb-2">Bakery Items</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹50</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-010 | 400g | Brand: FarmFresh</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Soft, healthy, and rich in fiber.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Best Seller</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="350" data-brand="OrganicCo" data-tags="organic" id="product-1001">
+                    <a href="product-detail.html?id=1001" class="product-link">
+                        <img src="https://images.unsplash.com/photo-1508736793122-f516e3ba5569?w=400&h=300&fit=crop&crop=center" alt="Almonds" class="w-full h-40 object-cover mb-4 rounded-xl">
+                        <h3 class="text-lg font-semibold text-gray-700 product-name">Almonds</h3>
+                        <p class="text-sm text-gray-500 mb-2">Snacks</p>
+                        <p class="text-xl font-bold text-green-700 mb-1">₹350</p>
+                        <div class="flex items-center text-yellow-500 mb-2">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.5)
+                        </div>
+                        <p class="text-xs text-gray-400 mb-2">SKU: FB-011 | 250g | Brand: OrganicCo</p>
+                        <p class="text-xs text-green-600 mb-2">In Stock</p>
+                        <p class="text-xs text-gray-500 mb-2">Premium quality, rich in protein and fiber.</p>
+                        <div class="flex gap-2 mb-2">
+                            <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Organic</span>
+                        </div>
+                    </a>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2 add-to-cart-btn">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="120" data-brand="FreshBasket" data-tags="bestseller" id="product-1002">
+                    <a href="product-detail.html?id=1002" class="product-link">
+                        <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&crop=center" alt="Paneer" class="w-full h-40 object-cover mb-4 rounded-xl">
+                        <h3 class="text-lg font-semibold text-gray-700 product-name">Paneer</h3>
+                        <p class="text-sm text-gray-500 mb-2">Dairy Products</p>
+                        <p class="text-xl font-bold text-green-700 mb-1">₹120</p>
+                        <div class="flex items-center text-yellow-500 mb-2">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                        </div>
+                        <p class="text-xs text-gray-400 mb-2">SKU: FB-012 | 200g | Brand: FreshBasket</p>
+                        <p class="text-xs text-green-600 mb-2">In Stock</p>
+                        <p class="text-xs text-gray-500 mb-2">Soft, fresh, and high in protein.</p>
+                        <div class="flex gap-2 mb-2">
+                            <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Best Seller</span>
+                        </div>
+                    </a>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2 add-to-cart-btn">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="150" data-brand="OrganicCo" data-tags="organic">
+                    <img src="https://images.unsplash.com/photo-1563198804-b144dfc1661c?w=400&h=300&fit=crop&crop=center" alt="Green Tea" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Green Tea</h3>
+                    <p class="text-sm text-gray-500 mb-2">Beverages</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹150</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-013 | 100g | Brand: OrganicCo</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Antioxidant-rich, refreshing green tea.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Organic</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="110" data-brand="FarmFresh" data-tags="new">
+                    <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&h=300&fit=crop&crop=center" alt="Toor Dal" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Toor Dal</h3>
+                    <p class="text-sm text-gray-500 mb-2">Pulses & Grains</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹110</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-014 | 1kg | Brand: FarmFresh</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">High-quality split pigeon peas, protein-rich.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs">New</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+
+                <!-- New products added -->
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="75" data-brand="FreshBasket" data-tags="organic">
+                    <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=300&fit=crop&crop=center" alt="Fresh Tomatoes" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Fresh Tomatoes</h3>
+                    <p class="text-sm text-gray-500 mb-2">Fruits & Vegetables</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹75</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.5)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-015 | 1kg | Brand: FreshBasket</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Juicy, ripe tomatoes rich in vitamin C.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Organic</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="85" data-brand="OrganicCo" data-tags="bestseller">
+                    <img src="https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=400&h=300&fit=crop&crop=center" alt="Basmati Rice" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Basmati Rice</h3>
+                    <p class="text-sm text-gray-500 mb-2">Pulses & Grains</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹85</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (5.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-016 | 1kg | Brand: OrganicCo</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Premium long grain basmati rice with aromatic fragrance.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Best Seller</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="25" data-brand="FarmFresh" data-tags="organic">
+                    <img src="https://images.unsplash.com/photo-1587334274328-64186a80aeee?w=400&h=300&fit=crop&crop=center" alt="Fresh Onions" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Fresh Onions</h3>
+                    <p class="text-sm text-gray-500 mb-2">Fruits & Vegetables</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹25</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-017 | 1kg | Brand: FarmFresh</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Fresh, crisp onions perfect for cooking.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Organic</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="180" data-brand="OrganicCo" data-tags="new">
+                    <img src="https://images.unsplash.com/photo-1593105460803-9c9e999b9136?w=400&h=300&fit=crop&crop=center" alt="Olive Oil" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Extra Virgin Olive Oil</h3>
+                    <p class="text-sm text-gray-500 mb-2">Cooking Essentials</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹180</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.5)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-018 | 500ml | Brand: OrganicCo</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Cold-pressed, premium quality olive oil.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs">New</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="220" data-brand="FreshBasket" data-tags="bestseller">
+                    <img src="https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=400&h=300&fit=crop&crop=center" alt="Chicken Breast" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Fresh Chicken Breast</h3>
+                    <p class="text-sm text-gray-500 mb-2">Meat & Seafood</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹220</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (5.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-019 | 500g | Brand: FreshBasket</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Premium quality, fresh chicken breast.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Best Seller</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="65" data-brand="FarmFresh" data-tags="organic">
+                    <img src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400&h=300&fit=crop&crop=center" alt="Fresh Carrots" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Fresh Carrots</h3>
+                    <p class="text-sm text-gray-500 mb-2">Fruits & Vegetables</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹65</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.5)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-020 | 500g | Brand: FarmFresh</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Sweet, crunchy carrots rich in beta-carotene.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Organic</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="45" data-brand="OrganicCo" data-tags="new">
+                    <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400&h=300&fit=crop&crop=center" alt="Mixed Spices" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Garam Masala</h3>
+                    <p class="text-sm text-gray-500 mb-2">Spices & Seasonings</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹45</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-021 | 100g | Brand: OrganicCo</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Aromatic blend of authentic Indian spices.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs">New</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="35" data-brand="FreshBasket" data-tags="bestseller">
+                    <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=400&h=300&fit=crop&crop=center" alt="Fresh Eggs" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Farm Fresh Eggs</h3>
+                    <p class="text-sm text-gray-500 mb-2">Dairy Products</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹35</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (5.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-022 | 6 pieces | Brand: FreshBasket</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Fresh, free-range eggs from healthy hens.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Best Seller</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="55" data-brand="OrganicCo" data-tags="new">
+                    <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&h=300&fit=crop&crop=center" alt="Honey" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Pure Honey</h3>
+                    <p class="text-sm text-gray-500 mb-2">Organic Products</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹55</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.5)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-023 | 250g | Brand: OrganicCo</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Raw, unprocessed honey with natural enzymes.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs">New</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="95" data-brand="FarmFresh" data-tags="organic">
+                    <img src="https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=400&h=300&fit=crop&crop=center" alt="Fresh Bell Peppers" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Bell Peppers Mix</h3>
+                    <p class="text-sm text-gray-500 mb-2">Fruits & Vegetables</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹95</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-024 | 500g | Brand: FarmFresh</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Fresh colorful bell peppers, rich in vitamins.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Organic</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="125" data-brand="FreshBasket" data-tags="bestseller">
+                    <img src="https://images.unsplash.com/photo-1581781870022-31d2605e8874?w=400&h=300&fit=crop&crop=center" alt="Dish Soap" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Dishwash Liquid</h3>
+                    <p class="text-sm text-gray-500 mb-2">Cleaning Supplies</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹125</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-025 | 500ml | Brand: FreshBasket</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Effective grease-cutting dishwash liquid.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Best Seller</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="75" data-brand="OrganicCo" data-tags="new">
+                    <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=400&h=300&fit=crop&crop=center" alt="Toothpaste" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Herbal Toothpaste</h3>
+                    <p class="text-sm text-gray-500 mb-2">Personal Care</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹75</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.5)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-026 | 100g | Brand: OrganicCo</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Natural herbal toothpaste for healthy teeth.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs">New</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>                </div>
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card" data-price="90" data-brand="FreshBasket" data-tags="bestseller">
+                    <img src="https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=400&h=300&fit=crop&crop=center" alt="Eggs" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Eggs (Pack of 12)</h3>
+                    <p class="text-sm text-gray-500 mb-2">Dairy Products</p>
+                    <p class="text-xl font-bold text-green-700 mb-1">₹90</p>
+                    <div class="flex items-center text-yellow-500 mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">SKU: FB-015 | 12pcs | Brand: FreshBasket</p>
+                    <p class="text-xs text-green-600 mb-2">In Stock</p>
+                    <p class="text-xs text-gray-500 mb-2">Farm-fresh, protein-rich eggs.</p>
+                    <div class="flex gap-2 mb-2">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Best Seller</span>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2">Add to Cart</button>
+                    <button class="text-gray-400 hover:text-red-500 transition duration-300"><i class="far fa-heart text-lg"></i></button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer (copied from main page) -->
+    <footer class="bg-gray-800 text-white py-12 rounded-t-3xl mt-12">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="col-span-1 md:col-span-1">
+                <div class="flex items-center space-x-2 mb-4">
+                    <i class="fas fa-leaf text-green-400 text-3xl"></i>
+                    <span class="text-3xl font-bold text-white">FreshBasket</span>
+                </div>
+                <p class="text-gray-400 text-sm">Your one-stop shop for fresh, organic groceries delivered right to your doorstep.</p>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-green-400">Quick Links</h3>                <ul class="space-y-2">
+                    <li><a href="index.html" class="text-gray-400 hover:text-white transition duration-300">Home</a></li>
+                    <li><a href="shop.html" class="text-white font-bold transition duration-300">Shop</a></li>
+                    <li><a href="categories.html" class="text-gray-400 hover:text-white transition duration-300">Categories</a></li>
+                    <li><a href="offers.html" class="text-gray-400 hover:text-white transition duration-300">Offers</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-green-400">Customer Care</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">FAQs</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Returns & Refunds</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Terms & Conditions</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div>                <h3 class="text-xl font-semibold mb-4 text-green-400">Contact Us</h3>
+                <p class="text-gray-400 mb-2"><i class="fas fa-map-marker-alt mr-2"></i> ahemdabad, gujarat, India</p>
+                <p class="text-gray-400 mb-2"><i class="fas fa-phone mr-2"></i> +91 9601361549</p>
+                <p class="text-400 mb-4"><i class="fas fa-envelope mr-2"></i> info@freshbasket.com</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300 text-2xl transform hover:scale-110"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300 text-2xl transform hover:scale-110"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/mr_parmar6262/" class="text-gray-400 hover:text-white transition duration-300 text-2xl transform hover:scale-110"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/meet62/" class="text-gray-400 hover:text-white transition duration-300 text-2xl transform hover:scale-110"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500">
+            &copy; 2025 FreshBasket. All rights reserved.
+        </div>
+    </footer>    <script>
+        // Filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get filter elements
+            const priceRange = document.getElementById('price-range');
+            const priceValue = document.getElementById('price-value');
+            const brandSelect = document.getElementById('brand-select');
+            const tagFilters = document.querySelectorAll('.tag-filter');
+            const searchInput = document.getElementById('product-search');
+            const productCards = document.querySelectorAll('.product-card');
+            
+            // Add CSS for active tags
+            const style = document.createElement('style');
+            style.textContent = `
+                .tag-active {
+                    background-color: #047857 !important;
+                    color: white !important;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Create reset filters button
+            const filterSection = document.querySelector('aside');
+            if (filterSection) {
+                const resetButton = document.createElement('button');
+                resetButton.className = 'mt-6 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-full text-sm transition duration-300 w-full';
+                resetButton.textContent = 'Reset Filters';
+                resetButton.addEventListener('click', resetFilters);
+                filterSection.appendChild(resetButton);
+            }
+            
+            // Reset all filters
+            function resetFilters() {
+                if (priceRange) {
+                    priceRange.value = priceRange.max;
+                    priceValue.textContent = `₹${priceRange.value}`;
+                }
+                
+                if (brandSelect) {
+                    brandSelect.value = 'All';
+                }
+                
+                tagFilters.forEach(tag => {
+                    tag.classList.remove('tag-active');
+                });
+                
+                if (searchInput) {
+                    searchInput.value = '';
+                }
+                
+                updateFilters();
+            }
+            
+            // Price range filter
+            if (priceRange) {
+                priceRange.addEventListener('input', updateFilters);
+                priceRange.addEventListener('input', function() {
+                    priceValue.textContent = `₹${priceRange.value}`;
+                });
+            }
+            
+            // Brand select filter
+            if (brandSelect) {
+                brandSelect.addEventListener('change', updateFilters);
+            }
+            
+            // Tag filters
+            tagFilters.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    // Toggle active class
+                    this.classList.toggle('tag-active');
+                    updateFilters();
+                });
+            });
+            
+            // Search functionality
+            if (searchInput) {
+                searchInput.addEventListener('input', updateFilters);
+            }
+            
+            // Function to update product display based on filters
+            function updateFilters() {
+                const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+                const selectedPrice = priceRange ? parseInt(priceRange.value) : 500;
+                const selectedBrand = brandSelect ? brandSelect.value : 'All';
+                const activeTags = Array.from(document.querySelectorAll('.tag-filter.tag-active'))
+                    .map(tag => tag.getAttribute('data-tag'));
+                
+                productCards.forEach(card => {
+                    // Get card data
+                    const cardName = card.querySelector('.product-name').textContent.toLowerCase();
+                    const cardPrice = parseInt(card.getAttribute('data-price'));
+                    const cardBrand = card.getAttribute('data-brand');
+                    const cardTagsStr = card.getAttribute('data-tags');
+                    const cardTags = cardTagsStr && cardTagsStr.trim() !== '' ? cardTagsStr.split(',') : [];
+                    
+                    // Apply filters
+                    const matchesSearch = searchTerm === '' || cardName.includes(searchTerm);
+                    const matchesPrice = cardPrice <= selectedPrice;
+                    const matchesBrand = selectedBrand === 'All' || cardBrand === selectedBrand;
+                    
+                    let matchesTags = true;
+                    if (activeTags.length > 0) {
+                        matchesTags = activeTags.some(tag => cardTags.includes(tag));
+                    }
+                    
+                    // Show/hide card based on filters
+                    if (matchesSearch && matchesPrice && matchesBrand && matchesTags) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Show message if no products match filters
+                const visibleProducts = Array.from(productCards).filter(card => card.style.display !== 'none').length;
+                let noResultsMessage = document.getElementById('no-results');
+                
+                if (visibleProducts === 0) {
+                    if (!noResultsMessage) {
+                        noResultsMessage = document.createElement('div');
+                        noResultsMessage.id = 'no-results';
+                        noResultsMessage.className = 'col-span-1 sm:col-span-2 lg:col-span-3 text-center py-8 w-full';
+                        noResultsMessage.innerHTML = '<p class="text-gray-500 text-lg">No products match your filters. Please try different criteria.</p>';
+                        document.querySelector('.product-grid').appendChild(noResultsMessage);
+                    }
+                } else if (noResultsMessage) {
+                    noResultsMessage.remove();
+                }
+            }            // Initialize display values
+            if (priceRange && priceValue) {
+                priceValue.textContent = `₹${priceRange.value}`;
+            }
+        });
+        
+        // Navigation search functionality
+        function performNavSearch(inputId) {
+            const searchInput = document.getElementById(inputId);
+            const searchTerm = searchInput.value.trim();
+            
+            if (searchTerm) {
+                // If we're already on the shop page, use the product search
+                const productSearchInput = document.getElementById('product-search');
+                if (productSearchInput) {
+                    productSearchInput.value = searchTerm;
+                    // Trigger the search
+                    productSearchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    // Scroll to products section
+                    document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    // If we're on another page, redirect to shop with search term
+                    window.location.href = `shop.html?search=${encodeURIComponent(searchTerm)}`;
+                }
+                
+                // Clear the navigation search input
+                searchInput.value = '';
+            }
+        }
+        
+        // Add Enter key support for navigation search
+        document.addEventListener('DOMContentLoaded', function() {
+            const navSearchDesktop = document.getElementById('nav-search-desktop');
+            const navSearchMobile = document.getElementById('nav-search-mobile');
+            
+            if (navSearchDesktop) {
+                navSearchDesktop.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performNavSearch('nav-search-desktop');
+                    }
+                });
+            }
+            
+            if (navSearchMobile) {
+                navSearchMobile.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performNavSearch('nav-search-mobile');
+                    }
+                });
+            }
+        });
+          // Portal Effect Hero Slider transition is handled by transitions.js
+        
+        // Product Card and Cart Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up product cards to store data in localStorage when clicked
+            setupProductCards();
+            
+            // Initialize cart system
+            updateCartCount();
+            setupAddToCartButtons();
+            
+            // Handle URL parameters for category filtering
+            handleUrlParameters();
+        });
+        
+        function setupProductCards() {
+            const productCards = document.querySelectorAll('.product-card');
+            
+            productCards.forEach(card => {
+                // Generate ID if not already present
+                if (!card.id) {
+                    const productName = card.querySelector('.product-name').textContent.trim();
+                    const productId = 'product-' + generateIdFromName(productName);
+                    card.id = productId;
+                }
+                
+                const productId = card.id.replace('product-', '');
+                const productName = card.querySelector('.product-name').textContent;
+                const productCategory = card.querySelector('.text-sm.text-gray-500').textContent;
+                const priceText = card.querySelector('.text-green-700').textContent;
+                const productPrice = parseFloat(priceText.replace('₹', '').split(' ')[0]);
+                const productImage = card.querySelector('img').src;
+                const productBrand = card.dataset.brand || 'FreshBasket';
+                const productTags = card.dataset.tags ? card.dataset.tags.split(',') : [];
+                
+                // Get product description
+                let productDescription = '';
+                const descElem = card.querySelector('.text-xs.text-gray-500:not(.mb-2)');
+                if (descElem) {
+                    productDescription = descElem.textContent;
+                }
+                
+                // Get SKU and weight
+                let productSku = '', productWeight = '';
+                const skuElem = card.querySelector('.text-xs.text-gray-400');
+                if (skuElem) {
+                    const skuText = skuElem.textContent;
+                    const parts = skuText.split('|');
+                    if (parts.length >= 1) productSku = parts[0].trim().replace('SKU: ', '');
+                    if (parts.length >= 2) productWeight = parts[1].trim();
+                }
+                
+                // Get rating
+                let productRating = '4.0';
+                const ratingElem = card.querySelector('.text-yellow-500');
+                if (ratingElem) {
+                    const ratingMatch = ratingElem.textContent.match(/\(([0-9.]+)\)/);
+                    if (ratingMatch && ratingMatch[1]) {
+                        productRating = ratingMatch[1];
+                    }
+                }
+                
+                // Create product object
+                const product = {
+                    id: productId,
+                    name: productName,
+                    category: productCategory,
+                    price: productPrice,
+                    image: productImage,
+                    brand: productBrand,
+                    tags: productTags,
+                    description: productDescription,
+                    rating: productRating,
+                    sku: productSku,
+                    weight: productWeight,
+                    availability: 'In Stock'
+                };
+                
+                // Old price if available
+                const oldPriceElem = card.querySelector('.text-sm.text-gray-400.line-through');
+                if (oldPriceElem) {
+                    product.oldPrice = parseFloat(oldPriceElem.textContent.replace('₹', ''));
+                }
+                
+                // Store in localStorage for product detail page to use
+                localStorage.setItem(`product_${productId}`, JSON.stringify(product));
+                
+                // Create a product link if not already present
+                if (!card.querySelector('.product-link')) {
+                    // Wrap the content in a link
+                    wrapCardContentInLink(card, productId);
+                }
+            });
+        }
+        
+        function generateIdFromName(name) {
+            return name.toLowerCase()
+                .replace(/[^a-z0-9]/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '') + '-' + Math.floor(1000 + Math.random() * 9000);
+        }
+        
+        function wrapCardContentInLink(card, productId) {
+            // Create a link element
+            const link = document.createElement('a');
+            link.href = `product-detail.html?id=${productId}`;
+            link.className = 'product-link';
+            
+            // Elements to exclude from the link (buttons)
+            const excludedElements = Array.from(card.querySelectorAll('button'));
+            
+            // Clone all child nodes except excluded elements and add to link
+            Array.from(card.childNodes).forEach(node => {
+                if (!excludedElements.includes(node) && 
+                    !Array.from(excludedElements).some(el => el.contains(node))) {
+                    link.appendChild(node.cloneNode(true));
+                }
+            });
+            
+            // Remove the original children that were moved
+            Array.from(card.childNodes).forEach(node => {
+                if (!excludedElements.includes(node) && 
+                    !Array.from(excludedElements).some(el => el.contains(node))) {
+                    card.removeChild(node);
+                }
+            });
+            
+            // Add the link as the first child
+            card.insertBefore(link, card.firstChild);
+        }
+          function setupAddToCartButtons() {
+            const buttons = document.querySelectorAll('.product-card button:not(.text-gray-400)');
+            
+            buttons.forEach(button => {
+                // Add the add-to-cart-btn class if not already present
+                if (!button.classList.contains('add-to-cart-btn')) {
+                    button.classList.add('add-to-cart-btn');
+                }
+                
+                // Remove existing click listeners
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+                
+                // Add new click listener
+                newButton.addEventListener('click', function(event) {
+                    const productCard = event.target.closest('.product-card');
+                    const product = getProductDataFromCard(productCard);
+                    
+                    // Call addToCart function from cart.js
+                    addToCart(product);
+                    
+                    // Prevent event bubbling
+                    event.stopPropagation();
+                });
+            });
+        }
+          function handleUrlParameters() {
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category');
+            const tag = urlParams.get('tag');
+            const search = urlParams.get('search');
+            
+            if (search) {
+                // Set the search input value and trigger search
+                const productSearchInput = document.getElementById('product-search');
+                if (productSearchInput) {
+                    productSearchInput.value = search;
+                    // Trigger the search after a small delay to ensure DOM is ready
+                    setTimeout(() => {
+                        productSearchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    }, 100);
+                }
+            }
+            
+            if (category) {
+                filterByCategory(category);
+            }
+            
+            if (tag) {
+                filterByTag(tag);
+            }
+        }
+        
+        function filterByCategory(category) {
+            const productCards = document.querySelectorAll('.product-card');
+            let visibleCount = 0;
+            
+            // Category mapping to match product categories
+            const categoryMappings = {
+                'fruits-vegetables': ['Fruits & Vegetables'],
+                'dairy': ['Dairy Products'], 
+                'snacks': ['Snacks'],
+                'beverages': ['Beverages'],
+                'bakery': ['Bakery Items'],
+                'household': ['Household Essentials', 'Cleaning Supplies', 'Pulses & Grains', 'Cooking Essentials', 'Spices & Seasonings', 'Organic Products']
+            };
+            
+            const targetCategories = categoryMappings[category] || [category];
+            
+            productCards.forEach(card => {
+                const productCategory = card.querySelector('.text-sm.text-gray-500')?.textContent || '';
+                const shouldShow = targetCategories.some(cat => 
+                    productCategory.toLowerCase().includes(cat.toLowerCase())
+                );
+                
+                if (shouldShow) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Update page title to reflect the filter
+            const titleElement = document.querySelector('#products h1');
+            if (titleElement && category) {
+                const categoryNames = {
+                    'fruits-vegetables': 'Fruits & Vegetables',
+                    'dairy': 'Dairy Products',
+                    'snacks': 'Snacks', 
+                    'beverages': 'Beverages',
+                    'bakery': 'Bakery Items',
+                    'household': 'Household Essentials'
+                };
+                titleElement.textContent = `Shop ${categoryNames[category] || category}`;
+            }
+            
+            // Show no results message if needed
+            showNoResultsMessage(visibleCount);
+        }
+        
+        function filterByTag(tag) {
+            const productCards = document.querySelectorAll('.product-card');
+            let visibleCount = 0;
+            
+            productCards.forEach(card => {
+                const cardTags = card.getAttribute('data-tags') || '';
+                const tagArray = cardTags.split(',').map(t => t.trim().toLowerCase());
+                
+                if (tagArray.includes(tag.toLowerCase())) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Update page title
+            const titleElement = document.querySelector('#products h1');
+            if (titleElement) {
+                titleElement.textContent = `Shop ${tag.charAt(0).toUpperCase() + tag.slice(1)} Products`;
+            }
+            
+            showNoResultsMessage(visibleCount);
+        }
+        
+        function showNoResultsMessage(visibleCount) {
+            let noResultsMessage = document.getElementById('no-results');
+            
+            if (visibleCount === 0) {
+                if (!noResultsMessage) {
+                    noResultsMessage = document.createElement('div');
+                    noResultsMessage.id = 'no-results';
+                    noResultsMessage.className = 'col-span-1 sm:col-span-2 lg:col-span-3 text-center py-8 w-full';
+                    noResultsMessage.innerHTML = '<p class="text-gray-500 text-lg">No products found in this category.</p>';
+                    document.querySelector('.product-grid').appendChild(noResultsMessage);
+                }
+            } else if (noResultsMessage) {
+                noResultsMessage.remove();
+            }
+        }
+    </script>
+</body>
+</html>

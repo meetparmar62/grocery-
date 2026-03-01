@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail - FreshBasket</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">    <link rel="stylesheet" href="transitions.css">
+    <script src="transitions.js" defer></script>
+    <script src="cart.js" defer></script>
+    <script src="auth.js" defer></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .nav-link-hover::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #10B981;
+            transition: width .3s ease-in-out;
+        }
+        .nav-link-hover:hover::after {
+            width: 100%;
+        }
+
+        .product-image {
+            transition: transform 0.3s ease;
+        }
+        
+        .thumbnail {
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }        .thumbnail:hover, .thumbnail.active {
+            opacity: 1;
+            border-color: #10B981;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <!-- Header (copied from main page) -->
+    <header class="bg-white shadow-md sticky top-0 z-50">        <nav class="container mx-auto px-4 py-4 flex items-center justify-between h-16">            <a href="index.html" class="flex items-center space-x-2 hover:opacity-80 transition duration-300">
+                <i class="fas fa-leaf text-green-600 text-2xl"></i>
+                <span class="text-2xl font-bold text-green-700">FreshBasket</span>
+            </a>            <ul class="flex space-x-8 text-lg font-medium items-center">
+                <li><a href="index.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Home</a></li>
+                <li><a href="shop.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Shop</a></li>
+                <li><a href="categories.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Categories</a></li>
+                <li><a href="offers.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Offers</a></li>
+                <li><a href="about.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">About Us</a></li>
+                <li><a href="#" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Contact</a></li>
+            </ul>
+            <div class="flex items-center space-x-6">                <div class="relative">
+                    <input type="text" placeholder="Search..." class="pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300" id="nav-search-desktop">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer" onclick="performNavSearch('nav-search-desktop')"></i>
+                </div>
+                <a href="cart.html" class="relative text-gray-700 hover:text-green-600 transition duration-300 transform hover:scale-110">
+                    <i class="fas fa-shopping-cart text-2xl"></i>
+                    <span class="cart-count absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </a>                <a href="login.html" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300 shadow-md transform hover:scale-105">Login / Signup</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="container mx-auto px-4 py-4 text-sm">
+        <div class="flex items-center text-gray-600">
+            <a href="index.html" class="hover:text-green-600 transition duration-300">Home</a>
+            <span class="mx-2">/</span>
+            <a href="shop.html" class="hover:text-green-600 transition duration-300">Shop</a>
+            <span class="mx-2">/</span>
+            <span class="text-green-600 font-medium" id="product-breadcrumb">Product Details</span>
+        </div>
+    </div>
+
+    <!-- Product Detail Section -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-3xl shadow-lg overflow-hidden">
+            <div class="flex flex-row">
+                <!-- Product Images Section -->
+                <div class="w-1/2 p-6">
+                    <div class="relative mb-6">
+                        <img id="main-image" src="" alt="Product Image" class="w-full h-auto rounded-2xl product-image">
+                        <div class="absolute top-4 right-4 flex flex-col gap-2">
+                            <span id="product-tag" class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Organic</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center gap-4 thumbnails-container">
+                        <!-- Thumbnail images will be added with JavaScript -->
+                        <!-- For now, we'll add placeholders -->
+                        <img class="w-20 h-20 object-cover rounded-lg border-2 border-transparent thumbnail active" src="" alt="Thumbnail 1">
+                        <img class="w-20 h-20 object-cover rounded-lg border-2 border-transparent thumbnail" src="" alt="Thumbnail 2">
+                        <img class="w-20 h-20 object-cover rounded-lg border-2 border-transparent thumbnail" src="" alt="Thumbnail 3">
+                    </div>
+                </div>
+                
+                <!-- Product Info Section -->
+                <div class="w-1/2 p-8">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span id="product-category" class="text-sm text-gray-500 mb-2 block">Fruits & Vegetables</span>
+                            <h1 id="product-name" class="text-3xl font-bold text-gray-900 mb-2">Product Name</h1>
+                            <div class="flex items-center space-x-1 text-yellow-500 mb-4">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span id="product-rating" class="text-gray-600 ml-2">(4.5)</span>
+                            </div>
+                        </div>
+                        <button class="text-gray-400 hover:text-red-500 transition duration-300 transform hover:scale-110">
+                            <i class="far fa-heart text-2xl"></i>
+                        </button>
+                    </div>
+
+                    <div class="mb-6">
+                        <div class="flex items-baseline mb-4">
+                            <span id="product-price" class="text-3xl font-bold text-green-700">₹199</span>
+                            <span id="product-old-price" class="text-lg text-gray-400 line-through ml-2">₹250</span>
+                            <span id="product-discount" class="bg-orange-100 text-orange-700 text-sm px-2 py-1 rounded ml-3">20% Off</span>
+                        </div>
+                        <p id="product-description" class="text-gray-600 mb-6">
+                            Fresh and organic product. High quality guaranteed. Sourced directly from farmers for maximum freshness.
+                        </p>
+                        <div class="flex flex-col gap-2 mb-6">
+                            <div class="flex items-center">
+                                <span class="w-32 text-gray-500">Availability:</span>
+                                <span id="product-availability" class="text-green-600 font-medium">In Stock</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-32 text-gray-500">SKU:</span>
+                                <span id="product-sku">FB-001</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-32 text-gray-500">Brand:</span>
+                                <span id="product-brand">FarmFresh</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-32 text-gray-500">Weight:</span>
+                                <span id="product-weight">1 kg</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-4 mb-8">
+                        <div class="flex border rounded-full overflow-hidden">
+                            <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 transition duration-300 quantity-btn" data-action="decrease">-</button>
+                            <input type="text" value="1" id="quantity" class="w-12 text-center border-none focus:outline-none">
+                            <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 transition duration-300 quantity-btn" data-action="increase">+</button>
+                        </div>
+                        <button id="add-to-cart-detail" class="flex-grow bg-green-600 hover:bg-green-700 text-white rounded-full py-3 px-6 font-medium transition duration-300 flex items-center justify-center gap-2">
+                            <i class="fas fa-shopping-cart"></i>
+                            Add to Cart
+                        </button>
+                        <button class="bg-orange-500 hover:bg-orange-600 text-white rounded-full py-3 px-6 transition duration-300">
+                            <i class="fas fa-bolt"></i>
+                            Buy Now
+                        </button>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-lg font-semibold mb-4">Product Details</h3>
+                        <div id="product-details" class="text-gray-600">
+                            <p>Rich in vitamins and minerals. Sourced from organic farms with no use of harmful pesticides or chemicals. Best quality guaranteed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Related Products Section -->
+        <section class="py-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-8">Related Products</h2>
+            <div class="grid grid-cols-4 gap-6">
+                <!-- Related products will be added with JavaScript -->
+                <!-- For now, we'll add placeholders -->
+                <div class="bg-white rounded-2xl shadow-lg p-4 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-2 transition duration-300 product-card">
+                    <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&h=300&fit=crop&crop=center" alt="Related Product" class="w-full h-40 object-cover mb-4 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-700 product-name">Related Product 1</h3>
+                    <p class="text-sm text-gray-500 mb-2">Category</p>
+                    <p class="text-xl font-bold text-green-700 mb-4">₹99</p>
+                    <button class="bg-green-600 text-white w-full px-4 py-2 rounded-full text-sm hover:bg-green-700 transition duration-300 mb-2 add-to-cart-btn">Add to Cart</button>
+                </div>
+                <!-- Additional placeholders would be here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 rounded-t-3xl mt-12">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="col-span-1 md:col-span-1">
+                <div class="flex items-center space-x-2 mb-4">
+                    <i class="fas fa-leaf text-green-400 text-3xl"></i>
+                    <span class="text-3xl font-bold text-white">FreshBasket</span>
+                </div>
+                <p class="text-gray-400 text-sm">Your one-stop shop for fresh, organic groceries delivered right to your doorstep.</p>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-green-400">Quick Links</h3>
+                <ul class="space-y-2">
+                    <li><a href="index.html" class="text-gray-400 hover:text-white transition duration-300">Home</a></li>
+                    <li><a href="shop.html" class="text-gray-400 hover:text-white transition duration-300">Shop</a></li>
+                    <li><a href="categories.html" class="text-gray-400 hover:text-white transition duration-300">Categories</a></li>
+                    <li><a href="offers.html" class="text-gray-400 hover:text-white transition duration-300">Offers</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-green-400">Customer Care</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">FAQs</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Returns & Refunds</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Terms & Conditions</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div>                <h3 class="text-xl font-semibold mb-4 text-green-400">Contact Us</h3>
+                <p class="text-gray-400 mb-2"><i class="fas fa-map-marker-alt mr-2"></i> ahemdabad, gujarat, India</p>
+                <p class="text-gray-400 mb-2"><i class="fas fa-phone mr-2"></i> +91 9601361549</p>
+                <p class="text-gray-400 mb-4"><i class="fas fa-envelope mr-2"></i> info@freshbasket.com</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300 text-2xl transform hover:scale-110"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300 text-2xl transform hover:scale-110"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/mr_parmar6262/" class="text-gray-400 hover:text-white transition duration-300 text-2xl transform hover:scale-110"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/meet62/" class="text-gray-400 hover:text-white transition duration-300 text-2xl transform hover:scale-110"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500">
+            &copy; 2025 FreshBasket. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Product Detail Page Script
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get product details from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (productId) {
+                // In a real app, you would fetch product data from a backend API
+                // For this example, we'll use localStorage as a temporary "database"
+                displayProductFromLocalStorage(productId);
+            } else {
+                // If no ID provided, display a default product
+                displayDefaultProduct();
+            }
+            
+            // Set up quantity buttons
+            setupQuantityButtons();
+            
+            // Set up add to cart functionality
+            setupAddToCartButton();
+            
+            // Setup thumbnails
+            setupThumbnails();
+        });
+
+        function displayProductFromLocalStorage(productId) {
+            // Try to get product from localStorage
+            const storedProduct = localStorage.getItem(`product_${productId}`);
+            
+            if (storedProduct) {
+                const product = JSON.parse(storedProduct);
+                displayProduct(product);
+            } else {
+                // If product not found in localStorage, display default
+                displayDefaultProduct();
+            }
+        }
+        
+        function displayDefaultProduct() {
+            // Display placeholder data
+            document.getElementById('product-name').textContent = 'Organic Apples';
+            document.getElementById('product-category').textContent = 'Fruits & Vegetables';
+            document.getElementById('product-price').textContent = '₹199';
+            document.getElementById('product-old-price').textContent = '₹250';
+            document.getElementById('product-rating').textContent = '(4.5)';
+            document.getElementById('product-description').textContent = 'Fresh and juicy apples sourced from organic farms in Himachal Pradesh. Rich in fiber and vitamin C.';
+            document.getElementById('product-sku').textContent = 'FB-001';
+            document.getElementById('product-brand').textContent = 'FarmFresh';
+            document.getElementById('product-weight').textContent = '1 kg';
+            document.getElementById('product-details').textContent = 'These organic apples are cultivated using sustainable farming methods without the use of harmful pesticides or chemicals. They are handpicked at the peak of ripeness to ensure maximum freshness and flavor.';
+            
+            // Set main image
+            document.getElementById('main-image').src = 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&h=400&fit=crop&crop=center';
+            document.getElementById('main-image').alt = 'Organic Apples';
+            
+            // Update breadcrumb
+            document.getElementById('product-breadcrumb').textContent = 'Organic Apples';
+            
+            // Set thumbnails
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach((thumb, index) => {
+                thumb.src = `https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=200&h=200&fit=crop&crop=center&sig=${index+1}`;
+                thumb.alt = `Organic Apple ${index+1}`;
+            });
+        }
+        
+        function displayProduct(product) {
+            document.getElementById('product-name').textContent = product.name;
+            document.getElementById('product-category').textContent = product.category;
+            document.getElementById('product-price').textContent = `₹${product.price}`;
+            
+            if (product.oldPrice) {
+                document.getElementById('product-old-price').textContent = `₹${product.oldPrice}`;
+                document.getElementById('product-old-price').style.display = 'inline';
+                
+                const discountPercentage = Math.round((1 - product.price / product.oldPrice) * 100);
+                document.getElementById('product-discount').textContent = `${discountPercentage}% Off`;
+                document.getElementById('product-discount').style.display = 'inline-block';
+            } else {
+                document.getElementById('product-old-price').style.display = 'none';
+                document.getElementById('product-discount').style.display = 'none';
+            }
+            
+            document.getElementById('product-rating').textContent = `(${product.rating || '4.0'})`;
+            document.getElementById('product-description').textContent = product.description || 'No description available';
+            document.getElementById('product-sku').textContent = product.sku || 'FB-001';
+            document.getElementById('product-brand').textContent = product.brand || 'FreshBasket';
+            document.getElementById('product-weight').textContent = product.weight || '1 kg';
+            document.getElementById('product-details').textContent = product.details || 'No additional details available';
+            
+            // Set main image
+            document.getElementById('main-image').src = product.image;
+            document.getElementById('main-image').alt = product.name;
+            
+            // Update breadcrumb
+            document.getElementById('product-breadcrumb').textContent = product.name;
+            
+            // Set thumbnails if available
+            if (product.images && product.images.length > 0) {
+                const thumbnailContainer = document.querySelector('.thumbnails-container');
+                thumbnailContainer.innerHTML = ''; // Clear existing thumbnails
+                
+                product.images.forEach((img, index) => {
+                    const thumbnail = document.createElement('img');
+                    thumbnail.className = `w-20 h-20 object-cover rounded-lg border-2 border-transparent thumbnail ${index === 0 ? 'active' : ''}`;
+                    thumbnail.src = img;
+                    thumbnail.alt = `${product.name} ${index+1}`;
+                    thumbnailContainer.appendChild(thumbnail);
+                });
+                
+                setupThumbnails();
+            } else {
+                // Use main image for all thumbnails
+                const thumbnails = document.querySelectorAll('.thumbnail');
+                thumbnails.forEach(thumb => {
+                    thumb.src = product.image;
+                    thumb.alt = product.name;
+                });
+            }
+            
+            // Set product tag if available
+            if (product.tags && product.tags.length > 0) {
+                const tagElement = document.getElementById('product-tag');
+                tagElement.textContent = product.tags[0];
+                tagElement.style.display = 'inline-block';
+            } else {
+                document.getElementById('product-tag').style.display = 'none';
+            }
+        }
+        
+        function setupQuantityButtons() {
+            const quantityInput = document.getElementById('quantity');
+            
+            document.querySelectorAll('.quantity-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    let currentQty = parseInt(quantityInput.value, 10);
+                    
+                    if (btn.dataset.action === 'decrease') {
+                        currentQty = Math.max(1, currentQty - 1);
+                    } else {
+                        currentQty += 1;
+                    }
+                    
+                    quantityInput.value = currentQty;
+                });
+            });
+            
+            // Ensure quantity is always a valid number
+            quantityInput.addEventListener('change', () => {
+                let value = parseInt(quantityInput.value, 10);
+                if (isNaN(value) || value < 1) {
+                    value = 1;
+                }
+                quantityInput.value = value;
+            });
+        }
+          function setupAddToCartButton() {
+            const addToCartButton = document.getElementById('add-to-cart-detail');
+            
+            if (addToCartButton) {
+                console.log('Setting up add-to-cart button on product detail page');
+                
+                addToCartButton.addEventListener('click', () => {
+                    console.log('Add to cart button clicked on product detail page');
+                    const quantity = parseInt(document.getElementById('quantity').value, 10) || 1;
+                    
+                    const product = {
+                        id: new URLSearchParams(window.location.search).get('id') || 'detail-' + Date.now(),
+                        name: document.getElementById('product-name').textContent.trim(),
+                        price: parseFloat(document.getElementById('product-price').textContent.replace('₹', '').trim()),
+                        image: document.getElementById('main-image').src,
+                        brand: document.getElementById('product-brand').textContent.trim(),
+                        category: document.getElementById('product-category').textContent.trim(),
+                        quantity: quantity
+                    };
+                    
+                    console.log('Product to add to cart:', product);
+                    
+                    // Call the addToCart function from cart.js
+                    if (typeof addToCart === 'function') {
+                        addToCart(product);
+                    } else {
+                        // Fallback if addToCart is not available
+                        console.error('addToCart function not found');
+                        alert('Error: Could not add product to cart. Please try again later.');
+                    }
+                });
+            } else {
+                console.error('Add to cart button not found on product detail page');
+            }
+        }
+        
+        function setupThumbnails() {
+            const mainImage = document.getElementById('main-image');
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', () => {
+                    // Update main image
+                    mainImage.src = thumbnail.src;
+                    mainImage.alt = thumbnail.alt;
+                    
+                    // Update active thumbnail
+                    thumbnails.forEach(thumb => thumb.classList.remove('active'));
+                    thumbnail.classList.add('active');                });
+            });        }
+
+        // Navigation search functionality
+        function performNavSearch(inputId) {
+            const searchInput = document.getElementById(inputId);
+            const searchTerm = searchInput.value.trim();
+            
+            if (searchTerm) {
+                // Redirect to shop page with search term
+                window.location.href = `shop.html?search=${encodeURIComponent(searchTerm)}`;
+            }
+        }
+        
+        // Add Enter key support for navigation search
+        document.addEventListener('DOMContentLoaded', function() {
+            const navSearchDesktop = document.getElementById('nav-search-desktop');
+            
+            if (navSearchDesktop) {
+                navSearchDesktop.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performNavSearch('nav-search-desktop');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

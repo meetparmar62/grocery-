@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register - FreshBasket</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="transitions.css">
+    <script src="transitions.js" defer></script>
+    <script src="cart.js" defer></script>
+    <script src="auth.js" defer></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+
+        .nav-link-hover::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #10B981;
+            transition: width .3s ease-in-out;
+        }        .nav-link-hover:hover::after {
+            width: 100%;
+        }
+
+        .auth-container {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }        .form-slide {
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .form-slide.slide-left {
+            transform: translateX(-100%);
+        }
+
+        .form-slide.slide-right {
+            transform: translateX(100%);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            background: white;
+            padding: 0 0.25rem;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: 0;
+            left: 0.75rem;
+            font-size: 0.75rem;
+            color: #059669;
+            transform: translateY(-50%);
+        }
+
+        .password-strength {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .password-strength-bar.strength-weak {
+            width: 33%;
+            background: #ef4444;
+        }
+
+        .password-strength-bar.strength-medium {
+            width: 66%;
+            background: #f59e0b;
+        }
+
+        .password-strength-bar.strength-strong {
+            width: 100%;
+            background: #10b981;
+        }
+
+        .form-slide.slide-right {
+            transform: translateX(100%);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            transform: translateY(-20px) scale(0.8);
+            color: #059669;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            color: #6b7280;
+        }
+
+        .password-strength {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .strength-weak { width: 33%; background: #ef4444; }
+        .strength-medium { width: 66%; background: #f59e0b; }
+        .strength-strong { width: 100%; background: #10b981; }
+    </style>
+</head>
+<body class="text-gray-800">
+    <!-- Portal transition handled by transitions.js -->
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-4 flex items-center justify-between h-16">            <a href="index.html" class="flex items-center space-x-2 hover:opacity-80 transition duration-300">
+                <i class="fas fa-leaf text-green-600 text-2xl"></i>
+                <span class="text-2xl font-bold text-green-700">FreshBasket</span>
+            </a>
+            <ul class="flex space-x-8 text-lg font-medium items-center">
+                <li><a href="index.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Home</a></li>
+                <li><a href="shop.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Shop</a></li>
+                <li><a href="categories.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Categories</a></li>
+                <li><a href="offers.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Offers</a></li>
+                <li><a href="about.html" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">About Us</a></li>
+                <li><a href="#contact" class="text-gray-700 hover:text-green-600 transition duration-300 nav-link-hover">Contact</a></li>
+            </ul>
+            <div class="flex items-center space-x-6">                <div class="relative">
+                    <input type="text" placeholder="Search..." class="pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300" id="nav-search-desktop">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer" onclick="performNavSearch('nav-search-desktop')"></i>
+                </div>
+                <a href="cart.html" class="relative text-gray-700 hover:text-green-600 transition duration-300 transform hover:scale-110">
+                    <i class="fas fa-shopping-cart text-2xl"></i>
+                    <span class="cart-count absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </a>
+                <a href="login.html" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300 shadow-md transform hover:scale-105">Login / Signup</a>
+            </div>
+        </nav>    </header>
+
+    <!-- Main Content -->
+    <main class="min-h-screen flex items-center justify-center py-12 px-4">
+        <div class="auth-container max-w-md w-full rounded-3xl shadow-2xl p-8 relative overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0 opacity-5">
+                <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,<svg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" fill-rule=\"evenodd\"><g fill=\"%23059669\" fill-opacity=\"0.1\"><circle cx=\"7\" cy=\"7\" r=\"2\"/><circle cx=\"30\" cy=\"7\" r=\"2\"/><circle cx=\"53\" cy=\"7\" r=\"2\"/><circle cx=\"7\" cy=\"30\" r=\"2\"/><circle cx=\"30\" cy=\"30\" r=\"2\"/><circle cx=\"53\" cy=\"30\" r=\"2\"/><circle cx=\"7\" cy=\"53\" r=\"2\"/><circle cx=\"30\" cy=\"53\" r=\"2\"/><circle cx=\"53\" cy=\"53\" r=\"2\"/></g></g></svg>')"></div>
+            </div>
+
+            <!-- Logo -->
+            <div class="text-center mb-8 relative z-10">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <i class="fas fa-leaf text-green-600 text-3xl"></i>
+                    <span class="text-3xl font-bold text-green-700">FreshBasket</span>
+                </div>
+                <p class="text-gray-600">Welcome back! Please sign in to your account</p>
+            </div>
+
+            <!-- Form Toggle Buttons -->
+            <div class="flex bg-gray-100 rounded-xl p-1 mb-8 relative z-10">
+                <button id="login-tab" class="flex-1 py-2 px-4 rounded-lg text-center font-medium transition duration-300 bg-white text-green-600 shadow-sm">
+                    Login
+                </button>
+                <button id="register-tab" class="flex-1 py-2 px-4 rounded-lg text-center font-medium transition duration-300 text-gray-600 hover:text-green-600">
+                    Register
+                </button>
+            </div>            <!-- Forms Container -->
+            <div class="relative overflow-hidden min-h-[700px]">
+                <!-- Login Form -->
+                <form id="login-form" class="form-slide space-y-6 relative z-10 w-full">
+                    <div class="input-group">
+                        <input type="email" id="login-email" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-300" required>
+                        <label for="login-email">Email Address</label>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="login-password" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-300" required>
+                        <label for="login-password">Password</label>
+                        <button type="button" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600" onclick="togglePassword('login-password')">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                            <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                        </label>
+                        <a href="#" class="text-sm text-green-600 hover:text-green-700 font-medium">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition duration-300 transform hover:scale-105 shadow-lg">
+                        Sign In
+                    </button>
+
+                    <div class="text-center">
+                        <span class="text-gray-500">or</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <button type="button" class="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition duration-300">
+                            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="w-5 h-5 mr-3">
+                            Continue with Google
+                        </button>
+                        <button type="button" class="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition duration-300">
+                            <i class="fab fa-facebook-f text-blue-600 w-5 h-5 mr-3 flex items-center justify-center"></i>
+                            Continue with Facebook
+                        </button>
+                    </div>
+                </form>                <!-- Register Form -->
+                <form id="register-form" class="form-slide slide-right absolute top-0 left-0 w-full space-y-4 z-10 bg-white">
+                    <div class="input-group">
+                        <input type="text" id="register-name" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-300" required>
+                        <label for="register-name">Full Name</label>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="email" id="register-email" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-300" required>
+                        <label for="register-email">Email Address</label>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="tel" id="register-phone" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-300">
+                        <label for="register-phone">Phone Number</label>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="register-password" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-300" required>
+                        <label for="register-password">Password</label>
+                        <button type="button" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600" onclick="togglePassword('register-password')">
+                            <i class="far fa-eye"></i>
+                        </button>
+                        <div class="password-strength">
+                            <div class="password-strength-bar" id="password-strength-bar"></div>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1" id="password-strength-text">Password strength</div>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="register-confirm-password" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-300" required>
+                        <label for="register-confirm-password">Confirm Password</label>
+                        <div class="text-xs text-gray-500 mt-1" id="password-match-text"></div>
+                    </div>
+
+                    <label class="flex items-start">
+                        <input type="checkbox" class="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500 mt-1" required>
+                        <span class="ml-2 text-sm text-gray-600">
+                            I agree to the <a href="#" class="text-green-600 hover:text-green-700 font-medium">Terms of Service</a> and 
+                            <a href="#" class="text-green-600 hover:text-green-700 font-medium">Privacy Policy</a>
+                        </span>
+                    </label>
+
+                    <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition duration-300 transform hover:scale-105 shadow-lg">
+                        Create Account
+                    </button>
+
+                    <div class="text-center">
+                        <span class="text-gray-500">or</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <button type="button" class="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition duration-300">
+                            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="w-5 h-5 mr-3">
+                            Continue with Google
+                        </button>
+                        <button type="button" class="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition duration-300">
+                            <i class="fab fa-facebook-f text-blue-600 w-5 h-5 mr-3 flex items-center justify-center"></i>
+                            Continue with Facebook
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 rounded-t-3xl">        <div class="container mx-auto px-4 grid grid-cols-4 gap-8">
+            <div class="col-span-1">
+                <div class="flex items-center space-x-2 mb-4">
+                    <i class="fas fa-leaf text-green-400 text-3xl"></i>
+                    <span class="text-3xl font-bold text-white">FreshBasket</span>
+                </div>
+                <p class="text-gray-400 text-sm">Your one-stop shop for fresh, organic groceries delivered right to your doorstep.</p>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-green-400">Quick Links</h3>
+                <ul class="space-y-2">
+                    <li><a href="index.html" class="text-gray-400 hover:text-white transition duration-300">Home</a></li>
+                    <li><a href="shop.html" class="text-gray-400 hover:text-white transition duration-300">Shop</a></li>
+                    <li><a href="categories.html" class="text-gray-400 hover:text-white transition duration-300">Categories</a></li>
+                    <li><a href="offers.html" class="text-gray-400 hover:text-white transition duration-300">Offers</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-green-400">Customer Care</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">FAQs</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Returns & Refunds</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Terms & Conditions</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-green-400">Contact Us</h3>
+                <p class="text-gray-400 mb-2"><i class="fas fa-map-marker-alt mr-2"></i> ahemdabad, gujarat, India</p>
+                <p class="text-gray-400 mb-2"><i class="fas fa-phone mr-2"></i> +91 9601361549</p>
+                <p class="text-gray-400 mb-4"><i class="fas fa-envelope mr-2"></i> info@freshbasket.com</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300 text-2xl transform hover:scale-110"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300 text-2xl transform hover:scale-110"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/mr_parmar6262/" class="text-gray-400 hover:text-white transition duration-300 text-2xl transform hover:scale-110"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/meet62/" class="text-gray-400 hover:text-white transition duration-300 text-2xl transform hover:scale-110"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500">
+            &copy; 2025 FreshBasket. All rights reserved.
+        </div>
+    </footer>    <script>
+        // Mobile menu code removed - desktop-first design implementation
+
+        // Form Switching
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+
+        function switchToLogin() {
+            loginTab.className = 'flex-1 py-2 px-4 rounded-lg text-center font-medium transition duration-300 bg-white text-green-600 shadow-sm';
+            registerTab.className = 'flex-1 py-2 px-4 rounded-lg text-center font-medium transition duration-300 text-gray-600 hover:text-green-600';
+            
+            loginForm.classList.remove('slide-left');
+            registerForm.classList.add('slide-right');
+        }
+
+        function switchToRegister() {
+            registerTab.className = 'flex-1 py-2 px-4 rounded-lg text-center font-medium transition duration-300 bg-white text-green-600 shadow-sm';
+            loginTab.className = 'flex-1 py-2 px-4 rounded-lg text-center font-medium transition duration-300 text-gray-600 hover:text-green-600';
+            
+            loginForm.classList.add('slide-left');
+            registerForm.classList.remove('slide-right');
+        }
+
+        loginTab.addEventListener('click', switchToLogin);
+        registerTab.addEventListener('click', switchToRegister);
+
+        // Password Toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'far fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'far fa-eye';
+            }
+        }
+
+        // Password Strength Checker
+        const registerPassword = document.getElementById('register-password');
+        const strengthBar = document.getElementById('password-strength-bar');
+        const strengthText = document.getElementById('password-strength-text');
+
+        function checkPasswordStrength(password) {
+            let score = 0;
+            if (password.length >= 8) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/[a-z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[^A-Za-z0-9]/.test(password)) score++;
+
+            strengthBar.className = 'password-strength-bar';
+            
+            if (score < 3) {
+                strengthBar.classList.add('strength-weak');
+                strengthText.textContent = 'Weak password';
+                strengthText.className = 'text-xs text-red-500 mt-1';
+            } else if (score < 5) {
+                strengthBar.classList.add('strength-medium');
+                strengthText.textContent = 'Medium strength';
+                strengthText.className = 'text-xs text-yellow-500 mt-1';
+            } else {
+                strengthBar.classList.add('strength-strong');
+                strengthText.textContent = 'Strong password';
+                strengthText.className = 'text-xs text-green-500 mt-1';
+            }
+        }
+
+        registerPassword.addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+        });
+
+        // Password Match Checker
+        const confirmPassword = document.getElementById('register-confirm-password');
+        const matchText = document.getElementById('password-match-text');
+
+        confirmPassword.addEventListener('input', function() {
+            if (this.value === '') {
+                matchText.textContent = '';
+                return;
+            }
+            
+            if (this.value === registerPassword.value) {
+                matchText.textContent = 'Passwords match';
+                matchText.className = 'text-xs text-green-500 mt-1';
+            } else {
+                matchText.textContent = 'Passwords do not match';
+                matchText.className = 'text-xs text-red-500 mt-1';
+            }
+        });        // Form Submissions
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            // Basic validation
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            // Store user session (for demo purposes)
+            const userData = {
+                email: email,
+                name: email.split('@')[0],
+                loginTime: new Date().toISOString()
+            };
+            
+            if (window.authManager) {
+                window.authManager.login(userData);
+            } else {
+                localStorage.setItem('freshBasketUser', JSON.stringify(userData));
+            }
+            
+            // Show success message
+            showNotification('Login successful! Welcome back!', 'success');
+            
+            // Redirect after a short delay
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        });
+
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const phone = document.getElementById('register-phone').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            // Comprehensive validation
+            if (!name || !email || !password || !confirmPassword) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            if (password.length < 8) {
+                alert('Password must be at least 8 characters long');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            if (phone && !isValidPhone(phone)) {
+                alert('Please enter a valid phone number');
+                return;
+            }
+            
+            // Store user session (for demo purposes)
+            const userData = {
+                name: name,
+                email: email,
+                phone: phone,
+                registrationTime: new Date().toISOString()
+            };
+            
+            if (window.authManager) {
+                window.authManager.register(userData);
+            } else {
+                localStorage.setItem('freshBasketUser', JSON.stringify(userData));
+            }
+            
+            // Show success message
+            showNotification('Registration successful! Welcome to FreshBasket!', 'success');
+            
+            // Redirect after a short delay
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        });
+
+        // Validation helper functions
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function isValidPhone(phone) {
+            const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+            return phoneRegex.test(phone.replace(/\s/g, ''));
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transition-all duration-300 transform translate-x-full`;
+            
+            if (type === 'success') {
+                notification.classList.add('bg-green-500', 'text-white');
+                notification.innerHTML = `<i class="fas fa-check-circle mr-2"></i>${message}`;
+            } else if (type === 'error') {
+                notification.classList.add('bg-red-500', 'text-white');
+                notification.innerHTML = `<i class="fas fa-exclamation-circle mr-2"></i>${message}`;
+            } else {
+                notification.classList.add('bg-blue-500', 'text-white');
+                notification.innerHTML = `<i class="fas fa-info-circle mr-2"></i>${message}`;
+            }
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Animate out and remove
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);        }
+        
+        // Navigation search functionality
+        function performNavSearch(inputId) {
+            const searchInput = document.getElementById(inputId);
+            const searchTerm = searchInput.value.trim();
+            
+            if (searchTerm) {
+                // Redirect to shop page with search term
+                window.location.href = `shop.html?search=${encodeURIComponent(searchTerm)}`;
+            }
+        }
+        
+        // Add Enter key support for navigation search        document.addEventListener('DOMContentLoaded', function() {
+            const navSearchDesktop = document.getElementById('nav-search-desktop');
+            
+            if (navSearchDesktop) {
+                navSearchDesktop.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performNavSearch('nav-search-desktop');
+                    }
+                });
+            }
+            
+            // Mobile search removed - desktop only design
+        });
+
+        // Portal Effect Hero Slider transition is handled by transitions.js
+    </script>
+</body>
+</html>

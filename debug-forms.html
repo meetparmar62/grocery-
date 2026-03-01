@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Debug - FreshBasket</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+
+        .form-slide {
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .form-slide.slide-left {
+            transform: translateX(-100%);
+        }
+
+        .form-slide.slide-right {
+            transform: translateX(100%);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            background: white;
+            padding: 0 0.25rem;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: 0;
+            left: 0.75rem;
+            font-size: 0.75rem;
+            color: #059669;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-8">
+    <div class="max-w-md mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-8 text-green-700">Form Visibility Test</h1>
+        
+        <!-- Form Toggle Buttons -->
+        <div class="flex bg-gray-100 rounded-xl p-1 mb-8">
+            <button id="login-tab" class="flex-1 py-2 px-4 rounded-lg text-center font-medium transition duration-300 bg-white text-green-600 shadow-sm">
+                Login
+            </button>
+            <button id="register-tab" class="flex-1 py-2 px-4 rounded-lg text-center font-medium transition duration-300 text-gray-600 hover:text-green-600">
+                Register
+            </button>
+        </div>
+
+        <!-- Debug Info -->
+        <div id="debug-info" class="bg-yellow-100 border border-yellow-400 rounded-lg p-4 mb-4">
+            <h3 class="font-bold text-yellow-800">Debug Information:</h3>
+            <p id="current-form" class="text-yellow-700">Current Form: Login</p>
+            <p id="register-visibility" class="text-yellow-700">Register Form Visible: No</p>
+        </div>
+
+        <!-- Forms Container -->
+        <div class="relative overflow-hidden min-h-[500px] bg-white rounded-lg shadow-lg p-6">
+            <!-- Login Form -->
+            <form id="login-form" class="form-slide space-y-4 relative z-10">
+                <h2 class="text-xl font-bold text-green-700 mb-4">Login Form</h2>
+                <div class="input-group">
+                    <input type="email" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                    <label>Email Address</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                    <label>Password</label>
+                </div>
+                <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition duration-300">
+                    Sign In
+                </button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="form-slide slide-right absolute top-0 left-0 w-full space-y-4 z-10 bg-white p-6">
+                <h2 class="text-xl font-bold text-green-700 mb-4">Register Form</h2>
+                <div class="input-group">
+                    <input type="text" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                    <label>Full Name</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                    <label>Email Address</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                    <label>Password</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                    <label>Confirm Password</label>
+                </div>
+                <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition duration-300 transform hover:scale-105 shadow-lg">
+                    Create Account
+                </button>
+                <p class="text-center text-gray-500">👆 This is the submit button!</p>
+            </form>
+        </div>
+
+        <!-- Manual Test Buttons -->
+        <div class="mt-6 space-x-4 text-center">
+            <button id="show-register-btn" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                Force Show Register
+            </button>
+            <button id="show-login-btn" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                Force Show Login
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const currentFormEl = document.getElementById('current-form');
+        const registerVisibilityEl = document.getElementById('register-visibility');
+        const showRegisterBtn = document.getElementById('show-register-btn');
+        const showLoginBtn = document.getElementById('show-login-btn');
+
+        function updateDebugInfo() {
+            const isRegisterVisible = !registerForm.classList.contains('slide-right');
+            currentFormEl.textContent = `Current Form: ${isRegisterVisible ? 'Register' : 'Login'}`;
+            registerVisibilityEl.textContent = `Register Form Visible: ${isRegisterVisible ? 'Yes' : 'No'}`;
+            
+            console.log('Register form classes:', registerForm.className);
+            console.log('Login form classes:', loginForm.className);
+        }
+
+        function switchToLogin() {
+            loginTab.className = 'flex-1 py-2 px-4 rounded-lg text-center font-medium transition duration-300 bg-white text-green-600 shadow-sm';
+            registerTab.className = 'flex-1 py-2 px-4 rounded-lg text-center font-medium transition duration-300 text-gray-600 hover:text-green-600';
+            
+            loginForm.classList.remove('slide-left');
+            registerForm.classList.add('slide-right');
+            updateDebugInfo();
+        }
+
+        function switchToRegister() {
+            registerTab.className = 'flex-1 py-2 px-4 rounded-lg text-center font-medium transition duration-300 bg-white text-green-600 shadow-sm';
+            loginTab.className = 'flex-1 py-2 px-4 rounded-lg text-center font-medium transition duration-300 text-gray-600 hover:text-green-600';
+            
+            loginForm.classList.add('slide-left');
+            registerForm.classList.remove('slide-right');
+            updateDebugInfo();
+        }
+
+        loginTab.addEventListener('click', switchToLogin);
+        registerTab.addEventListener('click', switchToRegister);
+        showRegisterBtn.addEventListener('click', switchToRegister);
+        showLoginBtn.addEventListener('click', switchToLogin);
+
+        // Form submissions
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Login form submitted!');
+        });
+
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Register form submitted! Submit button is working!');
+        });
+
+        // Initial debug update
+        updateDebugInfo();
+    </script>
+</body>
+</html>
